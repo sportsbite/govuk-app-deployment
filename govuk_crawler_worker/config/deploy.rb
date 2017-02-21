@@ -19,7 +19,10 @@ namespace :deploy do
     on_rollback { run "rm -rf #{release_path}; true" }
     run "mkdir -p #{release_path}"
 
-    ci_base_url = "https://ci_alphagov:#{ENV['CI_DEPLOY_JENKINS_API_KEY']}@ci.integration.publishing.service.gov.uk/job/#{application}/job/master"
+    branch = ENV["TAG"] || "master"
+    branch = "master" if branch == "release"
+
+    ci_base_url = "https://ci_alphagov:#{ENV['CI_DEPLOY_JENKINS_API_KEY']}@ci.integration.publishing.service.gov.uk/job/#{application}/job/#{branch}"
 
     artefact_to_deploy = fetch(:artefact_number, fetch_last_build_number(ci_base_url))
     put "#{artefact_to_deploy}\n", "#{release_path}/build_number"
