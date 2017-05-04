@@ -5,7 +5,7 @@ def fetch_last_build_number(base_url)
   number = nil
   setup_http_request("#{base_url}/lastSuccessfulBuild/buildNumber") do |http, req|
     response = http.request(req)
-    raise "Got #{response.code} fetching artefact" unless response.code.to_i == 200
+    raise "#{base_url}/lastSuccessfulBuild/buildNumber: Got #{response.code} fetching artefact: #{response.message}: #{response.body}" unless response.code.to_i == 200
     number = response.body.strip
   end
   number
